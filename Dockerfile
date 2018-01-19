@@ -13,6 +13,12 @@ ENV CROWD_HOME=/var/atlassian/crowd \
     CROWD_PROXY_SCHEME= \
     KEYSTORE=$JAVA_HOME/jre/lib/security/cacerts
 
+# environment variables specific to Crowd config files in s3
+# ENVIRONMENT variable used for obtaining secrets in SSM
+ENV CROWD_CONFIG=crowd.tgz \
+    ENVIRONMENT=test   \
+    DATABASE_NAME=crowddb
+
 RUN export MYSQL_DRIVER_VERSION=5.1.44 && \
     export CONTAINER_USER=crowd &&  \
     export CONTAINER_GROUP=crowd &&  \
@@ -81,6 +87,14 @@ RUN chown -R crowd:crowd ${CROWD_HOME} && \
     export TINI_VERSION=0.9.0 && \
     curl -fsSL https://github.com/krallin/tini/releases/download/v${TINI_VERSION}/tini-static -o /bin/tini && \
     chmod +x /bin/tini && \
+
+# Install aws cli
+USER root
+RUN apk add --update \
+    python \
+    py-pip
+RUN pip install awscli
+
     # Remove obsolete packages
     apk del \
       ca-certificates \
