@@ -31,8 +31,7 @@ if [ -n "${CROWD_DELAYED_START}" ]; then
 fi
 
 # Download Atlassian required config files from s3
-/usr/bin/aws s3 cp s3://fathom-atlassian-ecs/crowd/${CROWD_CONFIG} ${CROWD_HOME}
-tar -xzf ${CROWD_CONFIG} -C ${CROWD_HOME}
+/usr/bin/aws s3 cp s3://fathom-atlassian-ecs/crowd/${CROWD_CONFIG} ${CROWD_HOME}/shared
 
 # Pull Atlassian secrets from parameter store
 AZ=$(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone)
@@ -46,9 +45,8 @@ DATABASE_NAME=${DATABASE_NAME}
 /bin/sed -i -e "s/DATABASE_ENDPOINT/$DATABASE_ENDPOINT/" \
             -e "s/DATABASE_USER/$DATABASE_USER/" \
             -e "s/DATABASE_PASSWORD/$DATABASE_PASSWORD/" \
-            -e "s/DATABASE_NAME/$DATABASE_NAME/" shared/crowd.cfg.xml
+            -e "s/DATABASE_NAME/$DATABASE_NAME/" shared/${CROWD_CONFIG}
 
-/bin/rm -rf ${CROWD_CONFIG}
 # End of aws section
 
 processCrowdProxySettings

@@ -15,7 +15,7 @@ ENV CROWD_HOME=/var/atlassian/crowd \
 
 # environment variables specific to Crowd config files in s3
 # ENVIRONMENT variable used for obtaining secrets in SSM
-ENV CROWD_CONFIG=crowd.tgz \
+ENV CROWD_CONFIG=crowd.cfg.xml \
     ENVIRONMENT=test   \
     DATABASE_NAME=crowddb
 
@@ -46,6 +46,7 @@ RUN export MYSQL_DRIVER_VERSION=5.1.44 && \
     mkdir -p /opt && \
     mv /tmp/crowd /opt/crowd && \
     mkdir -p ${CROWD_HOME} && \
+    mkdir -p ${CROWD_HOME}/shared && \
     mkdir -p ${CROWD_INSTALL}/crowd-webapp/WEB-INF/classes && \
     mkdir -p ${CROWD_INSTALL}/apache-tomcat/lib && \
     mkdir -p ${CROWD_INSTALL}/apache-tomcat/webapps/ROOT && \
@@ -87,6 +88,7 @@ RUN chown -R crowd:crowd ${CROWD_HOME} && \
     export TINI_VERSION=0.9.0 && \
     curl -fsSL https://github.com/krallin/tini/releases/download/v${TINI_VERSION}/tini-static -o /bin/tini && \
     chmod +x /bin/tini && \
+
 
 
     # Remove obsolete packages
