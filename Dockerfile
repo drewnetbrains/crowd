@@ -88,12 +88,6 @@ RUN chown -R crowd:crowd ${CROWD_HOME} && \
     curl -fsSL https://github.com/krallin/tini/releases/download/v${TINI_VERSION}/tini-static -o /bin/tini && \
     chmod +x /bin/tini && \
 
-    # Install aws cli
-    USER root
-    RUN apk add --update \
-        python \
-        py-pip
-    RUN pip install awscli
 
     # Remove obsolete packages
     apk del \
@@ -104,6 +98,13 @@ RUN chown -R crowd:crowd ${CROWD_HOME} && \
     rm -rf /var/cache/apk/* && \
     rm -rf /tmp/* && \
     rm -rf /var/log/*
+
+# Install aws cli
+USER root
+RUN apk add --update \
+    python \
+    py-pip
+RUN pip install awscli
 
 ENV CROWD_URL=http://localhost:8095/crowd \
     LOGIN_BASE_URL=http://localhost:8095 \
