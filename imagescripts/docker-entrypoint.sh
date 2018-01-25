@@ -31,7 +31,7 @@ if [ -n "${CROWD_DELAYED_START}" ]; then
 fi
 
 # Download Atlassian required config files from s3
-/usr/bin/aws s3 cp s3://fathom-atlassian-ecs/crowd/${CROWD_CONFIG} ${CROWD_HOME}/shared
+/usr/bin/aws s3 cp s3://fathom-atlassian-ecs/crowd/${CROWD_CONFIG} ${CROWD_HOME}/shared/${CROWD_CONFIG}
 
 # Pull Atlassian secrets from parameter store
 AZ=$(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone)
